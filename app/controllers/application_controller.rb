@@ -1,10 +1,10 @@
 class ApplicationController < ActionController::API
- @@buffer = Array.new(1)
+ @@buffer = Array.new(ENV.fetch('WINDOW_SIZE'){'1'}.to_i)
  @@index = 0
 
  def index
 	msg = []
-	204800.times{ msg << 'a' } 
+	ENV.fetch('MSG_SIZE'){'1024'}.to_i.times{ msg << 'a' } 
 	@@buffer[@@index] = msg
 	@@index = (@@index + 1) % @@buffer.size
  	head 200
