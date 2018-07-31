@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/gcinterceptor/gci-ruby
+  revision: 5d5e6c40a49dcb3ad91e87d31f28244938afc824
+  specs:
+    gci (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -135,6 +141,7 @@ PLATFORMS
 DEPENDENCIES
   bootsnap (>= 1.1.0)
   byebug
+  gci!
   listen (>= 3.0.5, < 3.2)
   puma (~> 3.11)
   rails (~> 5.2.0)
@@ -144,7 +151,7 @@ DEPENDENCIES
   tzinfo-data
 
 RUBY VERSION
-   ruby 2.4.0p0
+   ruby 2.5.1p57
 
 BUNDLED WITH
-   1.16.3
+   1.16.2

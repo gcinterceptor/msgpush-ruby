@@ -22,7 +22,12 @@ module Msgpush
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
 
-    config.middleware.use Gci
+    if ENV.has_key?('USE_GCI')
+      puts "==< Using GCI >=="
+      config.middleware.use Gci
+    else
+      puts "==< Not using GCI >=="
+    end
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
