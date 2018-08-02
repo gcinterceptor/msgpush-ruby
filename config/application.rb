@@ -13,6 +13,8 @@ require "action_cable/engine"
 # require "sprockets/railtie"
 require "rails/test_unit/railtie"
 
+require '/home/fireman/repos/gci-ruby/lib/gci'
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
@@ -25,8 +27,6 @@ module Msgpush
     if ENV.has_key?('USE_GCI')
       puts "==< Using GCI >=="
       config.middleware.use Gci
-    else
-      puts "==< Not using GCI >=="
     end
 
     # Settings in config/environments/* take precedence over those specified here.
