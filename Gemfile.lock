@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/gcinterceptor/gci-ruby
-  revision: 5d5e6c40a49dcb3ad91e87d31f28244938afc824
+  revision: 69f948cf4374884a2099ca724394a36f5581218d
   specs:
     gci (0.0.1)
 
