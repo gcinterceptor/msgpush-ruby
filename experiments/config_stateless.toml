@@ -10,26 +10,32 @@ vcpus = 2
 ram_gb = 4
 rails_version = "5.2.0"
 ruby_version = "2.5.1p57 (2018-03-29 revision 63029) [x86_64-linux]"
-go_version = "1.10 linux/amd64"  # compiled the gci proxy binary.
+go_version = "go1.10 linux/amd64"  # compiled the gci proxy binary.
+nginx_version = "nginx/1.14.0 (Ubuntu)"
+so_version = "Ubuntu 18.04 LTS"
+kernel_version = "4.15.0-29-generic"
 
 [execution]
+exports = 'export outdir="stateless"'
 load = 'ssh -i ${sshkey} ubuntu@${lb} "sudo rm /var/log/nginx/access.log; sudo /etc/init.d/nginx restart; echo \"GET http://localhost/\" | ./vegeta attack -duration=60s -rate=80 >/dev/null; sudo rm /var/log/nginx/access.log; sudo /etc/init.d/nginx restart; echo \"GET http://localhost/\" | ./vegeta attack -duration=120s -rate=80 > results.bin; cat results.bin | ./vegeta report > vegeta_${expid}.out; cat results.bin | ./vegeta report -reporter=plot > plot_${expid}.html; rm results.bin; cp /var/log/nginx/access.log al_${expid}.csv"'
 fetch_results = 'scp -i ${sshkey} ubuntu@${lb}:~/*_${expid}* ${outdir}; for ip in $ip1 $ip2 $ip3 $ip4; do scp -i ${sshkey} ubuntu@${ip}:~/*_${expid}_${ip}* ${outdir}; done'
 cleanup = 'ssh -i ${sshkey} ubuntu@${lb} "rm *${expid}*"; for ip in $ip1 $ip2 $ip3 $ip4; do ssh -i ${sshkey} ubuntu@${ip} "rm *${expid}_${ip}*"; done'
  
   [execution.no_gci]
   start = 'for ip in $ip1 $ip2 $ip3 $ip4; do ssh -i ${sshkey} ubuntu@${ip} "kill -9 \$(lsof -i tcp:3000 -t) 2>/dev/null; kill -9 \$(lsof -i tcp:8000 -t) 2>/dev/null; cd msgpush-ruby; MSG_SIZE=10240 WINDOW_SIZE=1 nohup puma --bind tcp://${ip}:3000  >../msgpush_${expid}_${ip}.out 2>../msgpush_${expid}_${ip}.err &"; done'
-  exports_1 = 'export outdir="stateless"; export expid="nogci_1"'
-  exports_2 = 'export outdir="stateless"; export expid="nogci_2"'
-  exports_3 = 'export outdir="stateless"; export expid="nogci_3"'
-  exports_4 = 'export outdir="stateless"; export expid="nogci_4"'
-  exports_5 = 'export outdir="stateless"; export expid="nogci_5"'
+  exports_1 = 'export expid="nogci_1"'
+  exports_2 = 'export expid="nogci_2"'
+  exports_3 = 'export expid="nogci_3"'
+  exports_4 = 'export expid="nogci_4"'
+  exports_5 = 'export expid="nogci_5"'
 
   [execution.gci]
   start = 'for ip in $ip1 $ip2 $ip3 $ip4; do ssh -i ${sshkey} ubuntu@${ip} "kill -9 \$(lsof -i tcp:3000 -t) 2>/dev/null; kill -9 \$(lsof -i tcp:8000 -t) 2>/dev/null; nohup ./gci-proxy --port 3000 --url http://127.0.0.1:8000 --ygen=67108864 --tgen=67108864 >proxy_${expid}_${ip}.out 2>proxy_${expid}_${ip}.err& cd msgpush-ruby; USE_GCI=true MSG_SIZE=10240 WINDOW_SIZE=1 nohup puma --bind tcp://127.0.0.1:8000  >../msgpush_${expid}_${ip}.out 2>../msgpush_${expid}_${ip}.err &"; done'
-  exports_1 = 'export outdir="stateless"; export expid="gci_1"'
-  exports_2 = 'export outdir="stateless"; export expid="gci_2"'
-  exports_3 = 'export outdir="stateless"; export expid="gci_3"'
-  exports_4 = 'export outdir="stateless"; export expid="gci_4"'
-  exports_5 = 'export outdir="stateless"; export expid="gci_5"'
+  exports_1 = 'export expid="gci_1"'
+  exports_2 = 'export expid="gci_2"'
+  exports_3 = 'export expid="gci_3"'
+  exports_4 = 'export expid="gci_4"'
+  exports_5 = 'export expid="gci_5"'
     
+[results]
+raw_bundle_path = 'stateless_results.zip'
