@@ -1,4 +1,4 @@
-title = "Configuration to run mspush-ruby"
+title = "Mspush-ruby's stateless experiments."
 
 [owner]
 name = "Daniel Fireman"
@@ -19,11 +19,17 @@ cleanup = 'ssh -i ${sshkey} ubuntu@${lb} "rm *${expid}*"; for ip in $ip1 $ip2 $i
  
   [execution.no_gci]
   start = 'for ip in $ip1 $ip2 $ip3 $ip4; do ssh -i ${sshkey} ubuntu@${ip} "kill -9 \$(lsof -i tcp:3000 -t) 2>/dev/null; kill -9 \$(lsof -i tcp:8000 -t) 2>/dev/null; cd msgpush-ruby; MSG_SIZE=10240 WINDOW_SIZE=1 nohup puma --bind tcp://${ip}:3000  >../msgpush_${expid}_${ip}.out 2>../msgpush_${expid}_${ip}.err &"; done'
-    [execution.nogci.1]
-    exports = 'export outdir="stateless"; export expid="nogci_1"'
+  exports_1 = 'export outdir="stateless"; export expid="nogci_1"'
+  exports_2 = 'export outdir="stateless"; export expid="nogci_2"'
+  exports_3 = 'export outdir="stateless"; export expid="nogci_3"'
+  exports_4 = 'export outdir="stateless"; export expid="nogci_4"'
+  exports_5 = 'export outdir="stateless"; export expid="nogci_5"'
 
   [execution.gci]
   start = 'for ip in $ip1 $ip2 $ip3 $ip4; do ssh -i ${sshkey} ubuntu@${ip} "kill -9 \$(lsof -i tcp:3000 -t) 2>/dev/null; kill -9 \$(lsof -i tcp:8000 -t) 2>/dev/null; nohup ./gci-proxy --port 3000 --url http://127.0.0.1:8000 --ygen=67108864 --tgen=67108864 >proxy_${expid}_${ip}.out 2>proxy_${expid}_${ip}.err& cd msgpush-ruby; USE_GCI=true MSG_SIZE=10240 WINDOW_SIZE=1 nohup puma --bind tcp://127.0.0.1:8000  >../msgpush_${expid}_${ip}.out 2>../msgpush_${expid}_${ip}.err &"; done'
-    [execution.gci.1]
-    exports = 'export outdir="stateless"; export expid="gci_1"'
+  exports_1 = 'export outdir="stateless"; export expid="gci_1"'
+  exports_2 = 'export outdir="stateless"; export expid="gci_2"'
+  exports_3 = 'export outdir="stateless"; export expid="gci_3"'
+  exports_4 = 'export outdir="stateless"; export expid="gci_4"'
+  exports_5 = 'export outdir="stateless"; export expid="gci_5"'
     
