@@ -36,6 +36,3 @@ cleanup = 'ssh -i ${sshkey} ubuntu@${lb} "rm *${expid}*"; for ip in $ip1 $ip2 $i
   exports_3 = 'export expid="gci_3"'
   exports_4 = 'export expid="gci_4"'
   exports_5 = 'export expid="gci_5"'
-    
-[results]
-raw_bundle_path = 'stateless_results.zip'
